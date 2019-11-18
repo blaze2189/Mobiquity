@@ -3,6 +3,7 @@ package com.mobiquityinc.service.impl;
 import com.mobiquityinc.entity.Item;
 import com.mobiquityinc.entity.Package;
 import com.mobiquityinc.entity.TreePackage;
+import com.mobiquityinc.exception.APIException;
 import com.mobiquityinc.service.Process;
 import lombok.SneakyThrows;
 
@@ -13,14 +14,8 @@ import java.util.stream.Collectors;
 
 public class ProcessImpl implements Process {
 
-
     @Override
-    public List<Item> validateItems(Double weight, List<Item> itemList) {
-        return itemList.stream().filter(item -> item.getWeight() <= weight).sorted().collect(Collectors.toList());
-    }
-
-    @Override
-    public Package computeBestPackage(Double weight, List<Item> itemList) {
+    public Package computeBestPackage(Double weight, List<Item> itemList) throws APIException {
 
         List<Item> validSortedItemList = validateItems(weight, itemList);
 
@@ -29,9 +24,13 @@ public class ProcessImpl implements Process {
 
     }
 
-    private Package computeItems(List<Item> itemList, Double weight) {
+    private List<Item> validateItems(Double weight, List<Item> itemList) {
+        return itemList.stream().filter(item -> item.getWeight() <= weight).sorted().collect(Collectors.toList());
+    }
+
+    private Package computeItems(List<Item> itemList, Double weight) throws APIException {
         List<TreePackage> treePackageList = new ArrayList<>();
-        //init the tree
+        //init tree
         itemList.forEach(item -> {
             TreePackage treePackage = new TreePackage(item);
             treePackageList.add(treePackage);
@@ -109,9 +108,16 @@ public class ProcessImpl implements Process {
         rootTreePackage.getTreePackageList().add(treePackage);
     }
 
-    private Package findOptimalPackage(List<Package> packageList) {
+    private Package findOptimalPackage(List<Package> packageList) throws APIException {
 
-        Integer maxPrice = packageList.stream().max(Package::compareTo).get().getPrice();
+        boolean maxExist = packageList.stream().max(Package::compareTo).isPresent();
+        Integer maxPrice;
+
+        if (maxExist) {
+            maxPrice = packageList.stream().max(Package::compareTo).get().getPrice();
+        } else {
+            throw new APIException("Couldn't find any best option");
+        }
 
         if (packageList.stream().filter(pakage -> Objects.equals(pakage.getPrice(), maxPrice)).count() > 1) {
             return packageList.stream().filter(pakage -> pakage.getPrice() < maxPrice).max(Package::compareTo).get();

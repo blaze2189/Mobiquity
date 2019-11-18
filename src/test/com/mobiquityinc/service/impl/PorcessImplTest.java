@@ -2,6 +2,7 @@ package com.mobiquityinc.service.impl;
 
 import com.mobiquityinc.entity.Item;
 import com.mobiquityinc.entity.Package;
+import com.mobiquityinc.exception.APIException;
 import com.mobiquityinc.service.Process;
 import org.junit.Test;
 
@@ -17,19 +18,7 @@ public class PorcessImplTest {
     private Process process = new ProcessImpl();
 
     @Test
-    public void testValidateItems() {
-        Double weight = 20.00;
-        List<Item> itemList = new ArrayList<>();
-        itemList.add(new Item(1, 12.01, 101));
-        itemList.add(new Item(2, 50.65, 99));
-        itemList.add(new Item(3, 20.0, 50));
-        itemList.add(new Item(4, 19.8, 100));
-        List<Item> newItemList = process.validateItems(weight, itemList);
-        assertEquals(itemList.size() - 1, newItemList.size());
-    }
-
-    @Test
-    public void testCalculate() {
+    public void testCalculate() throws APIException{
         Double totalWeight = 81.0;
         List<Item> itemList = new ArrayList<>();
         List<Integer> listInteger = Collections.singletonList(4);
@@ -48,7 +37,7 @@ public class PorcessImplTest {
     }
 
     @Test
-    public void testCalculateNotOfficial() {
+    public void testCalculateNotOfficial() throws APIException{
         Double weight = 81.0;
         List<Item> itemList = new ArrayList<>();
         itemList.add(new Item(1, 53.38, 44));
@@ -63,13 +52,13 @@ public class PorcessImplTest {
     }
 
     @Test
-    public void testCalculateThird() {
+    public void testCalculateThird() throws APIException{
 
         double d = 14.55D;
         double d2 = 60.02D;
         List<Integer> listInteger = Arrays.asList(2, 7);
-        Integer price = 148;
-        Double weight = 74.57;
+        Integer price = 74+74;
+        Double weight = 14.55+60.02;
         Package expected = new Package(listInteger, weight, price);
         Double totalWeight = 75.0;
         List<Item> itemList = new ArrayList<>();

@@ -27,9 +27,7 @@ public class Package implements Comparable, Cloneable {
     }
 
     @Override
-    public Object clone() throws
-            CloneNotSupportedException {
-        //return super.clone();
+    public Object clone() {
         Package clone = new Package();
         clone.setWeight(this.getWeight());
         clone.setPrice(this.getPrice());
