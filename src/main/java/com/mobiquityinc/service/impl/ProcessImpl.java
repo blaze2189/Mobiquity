@@ -5,7 +5,6 @@ import com.mobiquityinc.entity.Package;
 import com.mobiquityinc.entity.TreePackage;
 import com.mobiquityinc.exception.APIException;
 import com.mobiquityinc.service.Process;
-import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +63,6 @@ public class ProcessImpl implements Process {
         return listPackage;
     }
 
-    @SneakyThrows
     private Package cloneAndUpdatePackage(Package pakage, TreePackage treePackage) {
         Package localPackage = (Package) pakage.clone();
 

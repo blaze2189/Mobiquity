@@ -12,7 +12,7 @@ public class PackerTest {
     @Test
     public void testPack() throws APIException {
         String path = testFileRoute+"test.csv";
-        String expected = "4 \n-\n2 7 \n2 8 \n2 5 6 7 8 \n";
+        String expected = "4 \n-\n2 7 \n2 8 \n2 5 6 7 8 ";
         String result;
         try {
             result = Packer.pack(path);
