@@ -29,19 +29,26 @@ public class Packer {
 
         while (itemsIterators.hasNext()) {
             String row = itemsIterators.next();
-            DataFile dataFile = dataProcessor.processStringData(row);
-            Package packageResult = process.computeBestPackage(dataFile.getTotalWeight(), dataFile.getItemList());
-            if (packageResult.getItemId() != null) {
-                packageResult.getItemId().forEach(itemId -> result.append(itemId).append(" "));
-            } else {
-                result.append("-");
-            }
+            String items = buildResult(row);
+            result.append(items);
             if (itemsIterators.hasNext()) {
                 result.append("\n");
             }
         }
 
         return result.toString();
+    }
+
+    private static String buildResult(String row)throws APIException{
+        DataFile dataFile = dataProcessor.processStringData(row);
+        Package packageResult = process.computeBestPackage(dataFile.getTotalWeight(), dataFile.getItemList());
+        StringBuilder itemsBuilder = new StringBuilder();
+        if (packageResult.getItemId() != null) {
+            packageResult.getItemId().forEach(itemId -> itemsBuilder.append(itemId).append(" "));
+        } else {
+            itemsBuilder.append("-");
+        }
+        return itemsBuilder.toString().trim();
     }
 
 
